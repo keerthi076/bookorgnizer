@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" language="javascript">
+ </script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<title>books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></head>
+<body>
+
+
+    
+<div  class="container" style="text-align:center">
+<h2>BOOKS</h2><br>
+
+<input id="input1" type="text" value=""placeholder="Enter Book Name" >
+<input id="input2" type="text" placeholder="Enter Author Name" >
+<input id="input3" type="text" placeholder="Enter description" >
+
+<button  id="button1" onclick="clicking()"><b>CLICK TO ADD</b></button><br><br>
+<input id="myinput" type="text" placeholder="search using Book or author name" >
+<button id="search">&#128269;</button>
+
+<br></div><br>
+<table id="serial" >
+<thead>
+  <tr>
+  	<th style="width:10%;">Serial.No</th>
+    <th style="width:25%">Name</th>
+    <th style="width:25%">Author</th>
+    <th style="width:35%">Description</th>
+    <th style="width:5%">Actions</th>
+    
+  </tr></thead>
+<div id="myTable">
+  <tr><td id="num">1</td>
+    <td class="name">invisible path</td>
+    <td>firstauthor</td>
+    <td>Description</td>
+    <td><span class="delbut">&#128465;</span></td>
+   
+  </tr>
+  <tr>
+  	<td id="num">2</td>
+    <td class="name">abook</td>
+    <td>secondauthor</td>
+    <td>Description</td>
+      <td><span class="delbut">&#128465;</span></td>
+  </tr>
+
+  <tr>
+  	<td id="num">3</td>
+    <td class="name">passage to India</td>
+    <td>thirdauthor</td>
+    <td>Description</td>
+     <td><span class="delbut">&#128465;</span></td> 
+  </tr>
+  <tbody>
+  </tbody>
+</table>
+
+<p id="error"></p></div>
+<script>
+
+const tbody=document.querySelector("tbody");
+var filterTable = document.getElementById("serial");
+var i= filterTable.rows.length;
+const table1=document.querySelector('table');
+var error=0;
+function clicking(){
+	var error=0;
+	var i= filterTable.rows.length;
+	var input22=document.getElementById("input2").value;
+var input33=document.getElementById("input3").value;
+var input11 =document.getElementById("input1").value;
+var newarray=[];
+var roww=$("#serial tr").find("td:nth-child(2)");
+$(roww).each(function(){
+  newarray.push($(this).text());
+ 
+});
+  for(var l=0;l<=newarray.length;l++){
+  	if(input11==newarray[l]){
+  		error++;
+  	}
+  }
+
+  if(error!=0){
+    alert("Book already available");
+  }
+else{
+tbody.innerHTML +=`
+		<tr>
+		<td id="num">${i}
+		</td>
+		<td class="name">${input11}</td>
+		<td>${input22}</td>
+		<td>${input33}</td>
+		 <td><span class="delbut">&#128465;</span></td></tr>`;
+		i++;
+
+document.getElementById("input1").value="";	
+document.getElementById("input2").value="";	
+document.getElementById("input3").value="";	
+$(document).ready(function(){
+  var records=$("table").find("tbody > tr");
+  records.sort(function(a,b){
+  	var value1=$(a).children("td").eq(1).text();
+  	var value2=$(b).children("td").eq(1).text();
+  	 return (value1 < value2) ? -1 : (value1 > value2 ? 1 : 0)
+  });
+ $.each(records,function(index,row){
+  	$("table").append(row);
+  });
+var filterTable, rows1, k, x, y;
+filterTable = document.getElementById("serial");
+ y=0;
+ z=1;
+rows1 = filterTable.rows.length;
+
+for(k=1;k<rows1;k++){
+var new1 = filterTable.rows[k].cells[0];
+         new1.innerHTML=z;
+         z++;
+         }
+});
+
+  
+
+}}
+
+function onDeleteRow(e){
+
+if(!e.target.classList.contains("delbut")){
+	const btn=e.target;
+    btn.innerHTML=`<tr>
+	<td id="newinput"><input type="text"id="newinput" ><span id="ok" onclick="save()">&#9989;</span></td>
+		</tr>`;
+
+var but=document.getElementById("ok");
+but.addEventListener("click" ,function(){
+var newvalue=document.getElementById("newinput").value;
+btn.innerHTML=newvalue;
+})
+}
+else{
+	var btn=e.target;
+btn.closest('tr').remove();
+	
+
+
+var filterTable, rows1, k, x, y;
+filterTable = document.getElementById("serial");
+var y=0;
+var z=1;
+rows1 = filterTable.rows.length;
+
+for(k=1;k<rows1;k++){
+var new1 = filterTable.rows[k].cells[0];
+
+         new1.innerHTML=z;
+         z++;
+         }}
+       }
+table1.addEventListener('click',onDeleteRow);
+var count=$(" tbody tr").length ;
+$(document).ready(function(){
+$("#myinput").on("keyup", function() {
+	var count=$(" tbody tr").length ;
+	
+    var value=$("#myinput").val();
+      $("tbody tr").filter(function() {
+      var auth=$(this).find("td:nth-child(3)");
+      var book=$(this).find("td:nth-child(2)");
+if(($(auth).text().indexOf(value) > -1)||($(book).text().indexOf(value) >-1)){
+      $(this).show();
+      $("#error").hide();
+     }
+     else{
+      $(this).hide();
+     
+     count--;
+     
+    
+     }if(count == 0){
+      	$("#error").show();
+      $("#error").text("Match not found");
+     }
+});
+});
+});
+
+
+$(document).ready(function(){
+  var records=$("table").find("tbody > tr");
+  records.sort(function(a,b){
+  	var value1=$(a).children("td").eq(1).text();
+  	var value2=$(b).children("td").eq(1).text();
+  	 return (value1 < value2) ? -1 : (value1 > value2 ? 1 : 0)
+  });
+ $.each(records,function(index,row){
+  	$("table").append(row);
+  });
+var filterTable, rows1, k, x, y;
+filterTable = document.getElementById("serial");
+ y=0;
+ z=1;
+rows1 = filterTable.rows.length;
+
+for(k=1;k<rows1;k++){
+var new1 = filterTable.rows[k].cells[0];
+         new1.innerHTML=z;
+         z++;
+         }
+});
+
+
+
+</script>
+
+<style>
+  tbody{
+      margin:auto;
+    
+align-items:center;
+  }
+#myinput{
+	padding:4px;
+	background-color: #dddddd;
+	font-weight:bold;
+	width:220px;
+	margin-right:0px;
+}
+#search{
+	background-color:#dddddd;
+}
+#author{
+	margin-left:0px;
+    padding:4px;
+	background-color: #dddddd;
+	font-weight:bold;
+	
+	width:200px;}	 
+#line{
+	background-color: #9E4DFA; 
+	padding:10px;
+	border-radius:4px;
+	color:white;
+}
+body{
+	font-family:'philosopher',sans-serif;
+  text-align:center;
+}	 	
+table {
+      margin:auto;
+   overflow-x:auto;
+align-items:center;
+  border-collapse: collapse;
+ max-width: 700px;
+ 
+ width:100%;
+  font-size:16px;
+text-align:center;
+margin-left:px;
+border-radius: px;
+}
+.container{
+  width:100%;
+  max-width:;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  text-align:center;
+}
+
+td, th {
+  border: 2px solid #dddddd;
+  text-align:center;
+padding: 10px;
+  }
+
+.delbut{
+	color:red;
+	font-size:25px;
+}
+
+th{
+	font-size:20px;
+	background-color: #9E4DFA;
+	padding:12px;
+	color:white;
+}
+#error{
+	text-align:center;
+	color:red;
+}
+input[type=text]{
+	border-radius:5px;
+	margin:5px;
+	border-style:solid;
+	border-width:0.1px;
+}
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+#input1,#input2,#input3{
+	padding:10px;
+}
+#button1{
+	background-color: #9E4DFA;
+	padding:10px;
+	border:none;
+	color:white;
+	border-radius:4px;
+}
+
+</style>
+
+</body>
+</html>
+
+
